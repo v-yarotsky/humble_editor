@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$:.unshift File.expand_path("../../lib", __FILE__)
+require 'humble_editor'
+
+include HumbleEditor
+
+Signal.trap("SIGINT") do
+  puts "Terminating"
+  exit 1
+end
+
+exit Application.new.run
+
+
