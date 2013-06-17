@@ -12,24 +12,17 @@ module HumbleEditor
     end
 
     def get(api_path)
-      response = RestClient.get api_uri(api_path),
-        accept: :json
+      response = RestClient.get api_uri(api_path), *json_request_params
       json_result(response)
     end
 
     def post(api_path, data, params = {})
-      response = RestClient.post api_uri(api_path),
-        data.to_json,
-        content_type: :json,
-        accept: :json
+      response = RestClient.post api_uri(api_path), *json_request_params(data)
       json_result(response)
     end
 
     def put(api_path, data, params = {})
-      response = RestClient.put api_uri(api_path),
-        data.to_json,
-        content_type: :json,
-        accept: :json
+      response = RestClient.put api_uri(api_path), *json_request_params(data)
       json_result(response)
     end
 
@@ -37,6 +30,12 @@ module HumbleEditor
 
     def api_uri(api_path)
       URI.join(@api_root, api_path).to_s
+    end
+
+    def json_request_params(data = nil)
+      params = [content_type: :json, accept: :json]
+      params.unshift data.to_json if data
+      params
     end
 
     def json_result(response)
